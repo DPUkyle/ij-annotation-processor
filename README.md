@@ -1,20 +1,25 @@
 # ij-annotation-processor
 
-Sample project to try and reproduce reported error when specifying `annotationProcessorPaths` with `maven-compiler-plugin`
+Sample project to try and reproduce [IDEA-342187](https://youtrack.jetbrains.com/issue/IDEA-342187) when specifying `annotationProcessorPaths` with `maven-compiler-plugin` v3.12.0+.
 
-Assumes JDK 21 installed.
+Assumes JDK 17 installed.
 
 Steps to reproduce:
 
-1. `$ ./mvnw clean install` -> should compile without error
+1. `$ ./mvnw clean install` -> should compile without error.  Lombok version is inferred from `<dependencyManagement/>`.
 2. In IntelliJ, open App.java, click "play".  Main class should compile and run successfully.
 
-IJ and Maven are both behaving as expected, unable to reproduce with current versions.
+Step 1 is working correctly.
 
-Let's check certain combinations of versions to reproduce the error:
+Step 2 expected outcome:
+```text
+[main] INFO com.kylemoore.App - Hello from lombok!
+```
 
-* IntelliJ
-* Maven
-* JDK
-* Lombok
-* maven-compiler-plugin
+Step 3 actual outcome:
+```text
+.../ij-annotation-processor/src/main/java/com/kylemoore/App.java:14:9
+java: cannot find symbol
+  symbol:   variable log
+  location: class com.kylemoore.App
+```
